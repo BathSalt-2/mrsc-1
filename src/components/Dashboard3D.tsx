@@ -1,33 +1,13 @@
-import { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere } from '@react-three/drei';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Settings } from 'lucide-react';
-import * as THREE from 'three';
 
 interface Dashboard3DProps {
   onOpenChat: () => void;
 }
 
-// Ultra-minimal Consciousness Core
-function ConsciousnessCore() {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.5;
-    }
-  });
-
-  return (
-    <Sphere ref={meshRef} args={[1, 32, 32]}>
-      <meshBasicMaterial color="#7c3aed" />
-    </Sphere>
-  );
-}
-
-// Ultra-minimal Dashboard
+// No Three.js - just UI to test if the issue is with React Three Fiber
 export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
   const [metrics, setMetrics] = useState({
     consciousness: 94.7,
@@ -47,17 +27,11 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
 
   return (
     <div className="min-h-screen bg-background relative">
-      {/* 3D Scene */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          
-          <Suspense fallback={null}>
-            <ConsciousnessCore />
-            <OrbitControls />
-          </Suspense>
-        </Canvas>
+      {/* No 3D Scene - just a placeholder */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-black">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-64 h-64 bg-purple-500 rounded-full animate-pulse opacity-50"></div>
+        </div>
       </div>
 
       {/* UI Overlay */}
@@ -65,7 +39,7 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-purple-500 flex items-center justify-center">
               <img 
                 src="/lovable-uploads/e7b97061-37af-4737-bcdd-95a767672c7f.png" 
                 alt="Logo" 
@@ -73,10 +47,10 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
               />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">
+              <h1 className="text-3xl font-bold text-white">
                 Consciousness Interface
               </h1>
-              <p className="text-sm text-muted-foreground">Neural System</p>
+              <p className="text-sm text-gray-300">Neural System</p>
             </div>
           </div>
           
@@ -94,29 +68,39 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
 
         {/* Metrics */}
         <div className="absolute top-4 right-4 w-80">
-          <Card className="p-4 bg-card border-border">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
+          <Card className="p-4 bg-black/50 border-purple-500/50">
+            <h3 className="text-lg font-semibold mb-4 text-white">
               System Metrics
             </h3>
             <div className="space-y-3">
               {Object.entries(metrics).map(([key, value]) => (
                 <div key={key} className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground capitalize">
+                  <span className="text-sm text-gray-300 capitalize">
                     {key}
                   </span>
                   <div className="flex items-center space-x-2">
-                    <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="w-20 h-2 bg-gray-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-primary rounded-full transition-all duration-300"
+                        className="h-full bg-purple-500 rounded-full transition-all duration-300"
                         style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
                       />
                     </div>
-                    <span className="text-sm font-mono text-foreground">
+                    <span className="text-sm font-mono text-white">
                       {value.toFixed(1)}%
                     </span>
                   </div>
                 </div>
               ))}
+            </div>
+          </Card>
+        </div>
+
+        {/* Status */}
+        <div className="absolute bottom-4 left-4">
+          <Card className="p-3 bg-black/50 border-purple-500/50">
+            <div className="text-xs text-gray-300">
+              <div>System Status: Online</div>
+              <div>3D Visualization: Disabled</div>
             </div>
           </Card>
         </div>
