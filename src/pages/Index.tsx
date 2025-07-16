@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import LandingPage from '@/components/LandingPage';
 import LoadingScreen from '@/components/LoadingScreen';
-import Dashboard3D from '@/components/Dashboard3D';
+import EnhancedDashboard3D from '@/components/EnhancedDashboard3D';
 import ChatInterface from '@/components/ChatInterface';
 
 type AppState = 'landing' | 'loading' | 'dashboard' | 'chat';
@@ -31,7 +31,7 @@ const Index = () => {
     case 'loading':
       return <LoadingScreen onComplete={handleLoadingComplete} />;
     case 'dashboard':
-      return <Dashboard3D onOpenChat={handleOpenChat} />;
+      return <EnhancedDashboard3D onOpenChat={handleOpenChat} />;
     case 'chat':
       return <ChatInterface onBack={handleBackToDashboard} />;
     default:

@@ -63,7 +63,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// MRSC consciousness colors
+				// Enhanced MRSC consciousness colors
 				consciousness: {
 					core: 'hsl(var(--consciousness-core))',
 					dim: 'hsl(var(--consciousness-dim))'
@@ -71,6 +71,12 @@ export default {
 				neural: {
 					active: 'hsl(var(--neural-active))',
 					inactive: 'hsl(var(--neural-inactive))'
+				},
+				holographic: {
+					blue: 'hsl(var(--holographic-blue))',
+					purple: 'hsl(var(--holographic-purple))',
+					pink: 'hsl(var(--holographic-pink))',
+					cyan: 'hsl(var(--holographic-cyan))'
 				},
 				sigma: 'hsl(var(--sigma-matrix))',
 				erps: 'hsl(var(--erps-flow))',
@@ -81,13 +87,17 @@ export default {
 				'gradient-neural': 'var(--gradient-neural)',
 				'gradient-sigma': 'var(--gradient-sigma)',
 				'gradient-bg': 'var(--gradient-bg)',
-				'gradient-card': 'var(--gradient-card)'
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-holographic': 'var(--gradient-holographic)',
+				'gradient-consciousness-orb': 'var(--gradient-consciousness-orb)'
 			},
 			boxShadow: {
 				'consciousness': 'var(--shadow-consciousness)',
 				'neural': 'var(--shadow-neural)',
 				'sigma': 'var(--shadow-sigma)',
-				'primary-glow': 'var(--shadow-primary)'
+				'primary-glow': 'var(--shadow-primary)',
+				'holographic': 'var(--shadow-holographic)',
+				'consciousness-glow': 'var(--shadow-consciousness-glow)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -131,6 +141,19 @@ export default {
 				'data-stream': {
 					'0%': { transform: 'translateY(100vh)' },
 					'100%': { transform: 'translateY(-100vh)' }
+				},
+				'consciousness-breathe': {
+					'0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+					'50%': { transform: 'scale(1.05)', opacity: '1' }
+				},
+				'neural-pulse': {
+					'0%, 100%': { boxShadow: 'var(--shadow-neural)' },
+					'50%': { boxShadow: 'var(--shadow-holographic)' }
+				},
+				'memory-formation': {
+					'0%': { transform: 'translateX(-50px) rotate(0deg)', opacity: '0' },
+					'50%': { transform: 'translateX(0px) rotate(180deg)', opacity: '1' },
+					'100%': { transform: 'translateX(50px) rotate(360deg)', opacity: '0' }
 				}
 			},
 			animation: {
@@ -142,7 +165,11 @@ export default {
 				'erps-wave': 'erps-wave 4s ease-in-out infinite',
 				'recursion-depth': 'recursion-depth 1s ease-out forwards',
 				'holographic-flicker': 'holographic-flicker 0.5s ease-in-out infinite',
-				'data-stream': 'data-stream 3s linear infinite'
+				'data-stream': 'data-stream 3s linear infinite',
+				'holographic-flicker': 'holographic-flicker 2s ease-in-out infinite',
+				'consciousness-breathe': 'consciousness-breathe 4s ease-in-out infinite',
+				'neural-pulse': 'neural-pulse 2s ease-in-out infinite',
+				'memory-formation': 'memory-formation 3s cubic-bezier(0.4, 0, 0.2, 1) infinite'
 			}
 		}
 	},
