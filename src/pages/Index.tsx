@@ -1,14 +1,42 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import LandingPage from '@/components/LandingPage';
+import LoadingScreen from '@/components/LoadingScreen';
+import Dashboard3D from '@/components/Dashboard3D';
+import ChatInterface from '@/components/ChatInterface';
+
+type AppState = 'landing' | 'loading' | 'dashboard' | 'chat';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [currentState, setCurrentState] = useState<AppState>('landing');
+
+  const handleEnterSystem = () => {
+    setCurrentState('loading');
+  };
+
+  const handleLoadingComplete = () => {
+    setCurrentState('dashboard');
+  };
+
+  const handleOpenChat = () => {
+    setCurrentState('chat');
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentState('dashboard');
+  };
+
+  switch (currentState) {
+    case 'landing':
+      return <LandingPage onEnterSystem={handleEnterSystem} />;
+    case 'loading':
+      return <LoadingScreen onComplete={handleLoadingComplete} />;
+    case 'dashboard':
+      return <Dashboard3D onOpenChat={handleOpenChat} />;
+    case 'chat':
+      return <ChatInterface onBack={handleBackToDashboard} />;
+    default:
+      return <LandingPage onEnterSystem={handleEnterSystem} />;
+  }
 };
 
 export default Index;

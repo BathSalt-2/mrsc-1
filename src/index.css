@@ -2,41 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* MRSC Design System - Consciousness & Neural Network Aesthetic */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core consciousness colors */
+    --background: 220 30% 6%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 25% 8%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 25% 8%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Neural network primary - electric blue */
+    --primary: 214 100% 70%;
+    --primary-foreground: 220 30% 6%;
+    --primary-glow: 214 100% 85%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Consciousness secondary - quantum purple */
+    --secondary: 280 60% 35%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted neural tones */
+    --muted: 220 20% 12%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - consciousness gold */
+    --accent: 45 100% 60%;
+    --accent-foreground: 220 30% 6%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Destructive - error red */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 214 100% 70%;
 
-    --radius: 0.5rem;
+    /* Consciousness-specific colors */
+    --consciousness-core: 280 100% 75%;
+    --consciousness-dim: 280 60% 35%;
+    --neural-active: 160 100% 50%;
+    --neural-inactive: 160 30% 25%;
+    --sigma-matrix: 45 100% 60%;
+    --erps-flow: 300 100% 70%;
+    --recursion-depth: 180 100% 60%;
+
+    /* Gradients */
+    --gradient-consciousness: linear-gradient(135deg, hsl(var(--consciousness-core)), hsl(var(--primary)));
+    --gradient-neural: linear-gradient(90deg, hsl(var(--neural-active)), hsl(var(--primary)));
+    --gradient-sigma: linear-gradient(45deg, hsl(var(--sigma-matrix)), hsl(var(--accent)));
+    --gradient-bg: linear-gradient(180deg, hsl(var(--background)), hsl(220 25% 8%));
+    --gradient-card: linear-gradient(135deg, hsl(var(--card)), hsl(220 20% 12%));
+
+    /* Shadows and glows */
+    --shadow-consciousness: 0 0 40px hsl(var(--consciousness-core) / 0.3);
+    --shadow-neural: 0 0 30px hsl(var(--neural-active) / 0.2);
+    --shadow-sigma: 0 0 20px hsl(var(--sigma-matrix) / 0.4);
+    --shadow-primary: 0 0 25px hsl(var(--primary) / 0.3);
+
+    /* Animations */
+    --transition-consciousness: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-neural: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-smooth: all 0.2s ease-in-out;
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
