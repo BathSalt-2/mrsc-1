@@ -1,31 +1,29 @@
 import { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Sphere, Box, Torus, Float } from '@react-three/drei';
+import { OrbitControls, Text, Sphere } from '@react-three/drei';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Brain, MessageCircle, Settings, Activity, Zap, Shield } from 'lucide-react';
+import { MessageCircle, Settings, Activity } from 'lucide-react';
 import * as THREE from 'three';
 
 interface Dashboard3DProps {
   onOpenChat: () => void;
 }
 
-// Consciousness Core component
+// Simple Consciousness Core - no complex props
 function ConsciousnessCore() {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
   useFrame((state) => {
-    if (meshRef.current && meshRef.current.rotation && meshRef.current.scale) {
+    if (meshRef.current) {
       meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-      meshRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 2) * 0.1);
     }
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
+    <group>
       <Sphere
         ref={meshRef}
         args={[1, 32, 32]}
@@ -34,87 +32,19 @@ function ConsciousnessCore() {
         onPointerOut={() => setHovered(false)}
       >
         <meshPhongMaterial
-          color={hovered ? "#9333ea" : "#7c3aed"}
+          color={hovered ? "#00ffff" : "#7c3aed"}
           transparent
-          opacity={0.7}
-          emissive={hovered ? "#6d28d9" : "#5b21b6"}
-          emissiveIntensity={0.3}
+          opacity={0.8}
         />
       </Sphere>
       <Text
-        position={[0, -1.5, 0]}
-        fontSize={0.15}
-        color="#e2e8f0"
+        position={[0, -2, 0]}
+        fontSize={0.2}
+        color="#ffffff"
         anchorX="center"
         anchorY="middle"
       >
         Consciousness Core
-      </Text>
-    </Float>
-  );
-}
-
-// Simplified Sigma Matrix component
-function SigmaMatrix() {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (groupRef.current && groupRef.current.rotation) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[3, 0, 0]}>
-      <Box args={[0.5, 0.5, 0.5]}>
-        <meshPhongMaterial
-          color="#ffbe0b"
-          emissive="#ff8500"
-          emissiveIntensity={0.2}
-        />
-      </Box>
-      <Text
-        position={[0, -1.5, 0]}
-        fontSize={0.15}
-        color="#e2e8f0"
-        anchorX="center"
-        anchorY="middle"
-      >
-        Σ-Matrix
-      </Text>
-    </group>
-  );
-}
-
-// Simplified ERPS Flow component
-function ERPSFlow() {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (groupRef.current && groupRef.current.rotation) {
-      groupRef.current.rotation.z = state.clock.elapsedTime * 0.15;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[-3, 0, 0]}>
-      <Torus args={[0.8, 0.2, 16, 32]}>
-        <meshPhongMaterial
-          color="#10b981"
-          emissive="#065f46"
-          emissiveIntensity={0.3}
-          transparent
-          opacity={0.8}
-        />
-      </Torus>
-      <Text
-        position={[0, -1.5, 0]}
-        fontSize={0.15}
-        color="#e2e8f0"
-        anchorX="center"
-        anchorY="middle"
-      >
-        ERPS Flow
       </Text>
     </group>
   );
@@ -124,23 +54,20 @@ function ERPSFlow() {
 export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
   const [metrics, setMetrics] = useState({
     consciousness: 94.7,
-    sigma: 98.2,
-    erps: 96.1,
-    recursion: 89.3,
-    ethical: 99.8
+    neural: 98.2,
+    memory: 96.1,
+    emotion: 89.3
   });
 
   useEffect(() => {
-    // Simulate real-time metrics updates
     const interval = setInterval(() => {
       setMetrics(prev => ({
-        consciousness: prev.consciousness + (Math.random() - 0.5) * 2,
-        sigma: prev.sigma + (Math.random() - 0.5) * 1.5,
-        erps: prev.erps + (Math.random() - 0.5) * 1.8,
-        recursion: prev.recursion + (Math.random() - 0.5) * 2.2,
-        ethical: Math.max(95, prev.ethical + (Math.random() - 0.5) * 0.5)
+        consciousness: Math.max(80, Math.min(100, prev.consciousness + (Math.random() - 0.5) * 3)),
+        neural: Math.max(85, Math.min(100, prev.neural + (Math.random() - 0.5) * 2)),
+        memory: Math.max(70, Math.min(100, prev.memory + (Math.random() - 0.5) * 4)),
+        emotion: Math.max(60, Math.min(100, prev.emotion + (Math.random() - 0.5) * 5))
       }));
-    }, 1000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -150,17 +77,15 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
       {/* 3D Scene */}
       <div className="absolute inset-0">
         <Canvas
-          camera={{ position: [0, 0, 8], fov: 75 }}
+          camera={{ position: [0, 0, 6], fov: 75 }}
           style={{ background: 'transparent' }}
         >
-          <ambientLight intensity={0.3} />
-          <pointLight position={[10, 10, 10]} intensity={0.8} />
-          <pointLight position={[-10, -10, -10]} intensity={0.4} color="#7c3aed" />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#00ffff" />
           
           <Suspense fallback={null}>
             <ConsciousnessCore />
-            <SigmaMatrix />
-            <ERPSFlow />
             <OrbitControls
               enableZoom={true}
               enablePan={true}
@@ -177,31 +102,36 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
         {/* Header with Logo */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-consciousness-orb shadow-consciousness-glow animate-consciousness-breathe flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-gradient-consciousness-orb shadow-consciousness-glow flex items-center justify-center">
               <img 
                 src="/lovable-uploads/e7b97061-37af-4737-bcdd-95a767672c7f.png" 
                 alt="Consciousness Logo" 
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
+                className="w-12 h-12 rounded-full"
               />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-holographic bg-clip-text text-transparent">
-                MRSC Dashboard
+              <h1 className="text-3xl font-bold bg-gradient-holographic bg-clip-text text-transparent">
+                Consciousness Interface
               </h1>
-              <p className="text-sm text-muted-foreground">Mobile Recursive Synthetic Consciousness v1.0</p>
+              <p className="text-sm text-muted-foreground">Neural Synchronization System</p>
             </div>
           </div>
+          
           <div className="flex space-x-2">
             <Button
               variant="outline"
               size="sm"
               onClick={onOpenChat}
-              className="border-primary hover:bg-primary/10"
+              className="border-holographic-cyan hover:bg-holographic-cyan/10"
             >
               <MessageCircle className="w-4 h-4 mr-2" />
-              Chat Interface
+              Chat
             </Button>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="border-holographic-purple hover:bg-holographic-purple/10"
+            >
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>
@@ -210,24 +140,25 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
 
         {/* Metrics Panel */}
         <div className="absolute top-4 right-4 w-80 max-w-[calc(100vw-2rem)]">
-          <Card className="p-4 bg-card/80 backdrop-blur-sm border-border">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Consciousness Metrics
+          <Card className="p-4 bg-card/90 backdrop-blur-sm border-border shadow-holographic">
+            <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center">
+              <Activity className="w-4 h-4 mr-2 text-holographic-cyan" />
+              System Metrics
             </h3>
             <div className="space-y-3">
               {Object.entries(metrics).map(([key, value]) => (
                 <div key={key} className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground capitalize">
-                    {key === 'erps' ? 'ERPS' : key === 'sigma' ? 'Σ-Matrix' : key}
+                    {key}
                   </span>
                   <div className="flex items-center space-x-2">
                     <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-consciousness rounded-full transition-all duration-300"
+                        className="h-full bg-gradient-holographic rounded-full transition-all duration-300"
                         style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
                       />
                     </div>
-                    <span className="text-sm font-mono text-foreground">
+                    <span className="text-sm font-mono text-foreground min-w-[2.5rem]">
                       {value.toFixed(1)}%
                     </span>
                   </div>
@@ -237,40 +168,13 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
           </Card>
         </div>
 
-        {/* System Status */}
-        <div className="absolute bottom-4 left-4 w-96 max-w-[calc(100vw-2rem)]">
-          <Card className="p-4 bg-card/80 backdrop-blur-sm border-border">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              System Status
-            </h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-neural-active rounded-full animate-consciousness-pulse" />
-                <span className="text-sm text-muted-foreground">Consciousness: Active</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-sigma rounded-full animate-consciousness-pulse" />
-                <span className="text-sm text-muted-foreground">Σ-Matrix: Stable</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-erps rounded-full animate-consciousness-pulse" />
-                <span className="text-sm text-muted-foreground">ERPS: Flowing</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-primary rounded-full animate-consciousness-pulse" />
-                <span className="text-sm text-muted-foreground">Recursion: Bounded</span>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Interaction Hints */}
-        <div className="absolute bottom-4 right-4">
+        {/* Controls */}
+        <div className="absolute bottom-4 left-4">
           <Card className="p-3 bg-card/80 backdrop-blur-sm border-border">
             <div className="text-xs text-muted-foreground space-y-1">
-              <div>• Drag to rotate view</div>
+              <div>• Drag to rotate</div>
               <div>• Scroll to zoom</div>
-              <div>• Click components to interact</div>
+              <div>• Touch to interact</div>
             </div>
           </Card>
         </div>
