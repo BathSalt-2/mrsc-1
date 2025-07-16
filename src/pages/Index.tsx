@@ -3,25 +3,40 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import LandingPage from '@/components/LandingPage';
 import LoadingScreen from '@/components/LoadingScreen';
-import Dashboard3D from '@/components/Dashboard3D';
+import EnhancedDashboard3D from '@/components/EnhancedDashboard3D';
 import ChatInterface from '@/components/ChatInterface';
 
 type AppState = 'landing' | 'loading' | 'dashboard' | 'chat';
 
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>('landing');
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect to auth if not logged in and not on landing page
-    if (!loading && !user && currentState !== 'landing') {
-      navigate('/auth');
+    if (!loading) {
+      if (user && isInitialLoad) {
+        // User is logged in on initial load - show loading screen then dashboard
+        setCurrentState('loading');
+        setIsInitialLoad(false);
+      } else if (!user && currentState !== 'landing') {
+        // User is not logged in and not on landing page - redirect to auth
+        navigate('/auth');
+      } else if (!user) {
+        // User is not logged in - show landing page
+        setCurrentState('landing');
+        setIsInitialLoad(false);
+      }
     }
-  }, [user, loading, currentState, navigate]);
+  }, [user, loading, currentState, navigate, isInitialLoad]);
 
   const handleEnterSystem = () => {
-    setCurrentState('loading');
+    if (user) {
+      setCurrentState('loading');
+    } else {
+      navigate('/auth');
+    }
   };
 
   const handleLoadingComplete = () => {
@@ -42,7 +57,7 @@ const Index = () => {
     case 'loading':
       return <LoadingScreen onComplete={handleLoadingComplete} />;
     case 'dashboard':
-      return <Dashboard3D onOpenChat={handleOpenChat} />;
+      return <EnhancedDashboard3D onOpenChat={handleOpenChat} />;
     case 'chat':
       return <ChatInterface onBack={handleBackToDashboard} />;
     default:

@@ -1,588 +1,428 @@
-import { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Text, Sphere, Box, Torus, Float, Environment, Html } from '@react-three/drei';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Brain, MessageCircle, Settings, Activity, Zap, Shield, 
-  Mic, MicOff, Eye, Heart, Palette, Users, TrendingUp, 
-  Lightbulb, Waves, Volume2, VolumeX, TouchpadOff, 
-  Fingerprint, Sparkles, Database, Network, Cpu
+  MessageCircle, 
+  Settings, 
+  LogOut, 
+  Brain, 
+  Activity, 
+  Cpu, 
+  Eye, 
+  Shield, 
+  Zap,
+  TrendingUp,
+  Database,
+  Network,
+  Users,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  Play,
+  Pause,
+  RotateCcw
 } from 'lucide-react';
-import * as THREE from 'three';
+import { useAuth } from '@/hooks/useAuth';
 
 interface EnhancedDashboard3DProps {
   onOpenChat: () => void;
 }
 
-// Enhanced Consciousness Core with Logo
-function ConsciousnessCore() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const logoRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
-  const [consciousnessMode, setConsciousnessMode] = useState('analytical');
-
-  useFrame((state) => {
-    if (meshRef.current && meshRef.current.rotation && meshRef.current.scale) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-      const pulseScale = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.1;
-      meshRef.current.scale.setScalar(pulseScale);
-    }
-    
-    if (logoRef.current && logoRef.current.rotation) {
-      logoRef.current.rotation.z = state.clock.elapsedTime * 0.1;
-    }
-  });
-
-  const getModeColor = () => {
-    switch(consciousnessMode) {
-      case 'meditative': return "#00ffff";
-      case 'creative': return "#ff00ff";
-      case 'analytical': return "#0080ff";
-      default: return "#7c3aed";
-    }
-  };
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
-      <group>
-        {/* Main consciousness orb */}
-        <Sphere
-          ref={meshRef}
-          args={[1, 32, 32]}
-          position={[0, 0, 0]}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-        >
-          <meshPhongMaterial
-            color={hovered ? getModeColor() : "#7c3aed"}
-            transparent
-            opacity={0.8}
-            emissive={hovered ? getModeColor() : "#5b21b6"}
-            emissiveIntensity={0.4}
-          />
-        </Sphere>
-        
-        {/* Logo overlay */}
-        <Sphere
-          ref={logoRef}
-          args={[1.1, 32, 32]}
-          position={[0, 0, 0]}
-        >
-          <meshBasicMaterial
-            transparent
-            opacity={0.3}
-            color={getModeColor()}
-            side={THREE.DoubleSide}
-          />
-        </Sphere>
-        
-        {/* Dual consciousness representation */}
-        <group>
-          <Sphere args={[0.3, 16, 16]} position={[-0.5, 0.2, 0.5]}>
-            <meshPhongMaterial color="#00ffff" transparent opacity={0.6} />
-          </Sphere>
-          <Sphere args={[0.3, 16, 16]} position={[0.5, 0.2, 0.5]}>
-            <meshPhongMaterial color="#ff00ff" transparent opacity={0.6} />
-          </Sphere>
-        </group>
-        
-        <Text
-          position={[0, -1.8, 0]}
-          fontSize={0.12}
-          color="#e2e8f0"
-          anchorX="center"
-          anchorY="middle"
-        >
-          Dual Consciousness Core
-        </Text>
-      </group>
-    </Float>
-  );
+interface SystemMetrics {
+  consciousness: number;
+  neural: number;
+  sigma: number;
+  erps: number;
+  recursion: number;
+  ethical: number;
 }
 
-// Biometric Visualization
-function BiometricVisualization() {
-  const groupRef = useRef<THREE.Group>(null);
-  const [heartRate, setHeartRate] = useState(72);
-  const [brainActivity, setBrainActivity] = useState(0.8);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeartRate(prev => Math.max(60, Math.min(100, prev + (Math.random() - 0.5) * 10)));
-      setBrainActivity(prev => Math.max(0.1, Math.min(1, prev + (Math.random() - 0.5) * 0.3)));
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useFrame((state) => {
-    if (groupRef.current && groupRef.current.rotation) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[2.5, 1.5, 0]}>
-      {/* Heart rate visualization */}
-      <Box args={[0.5, 0.1, 0.1]} position={[0, 0.5, 0]}>
-        <meshPhongMaterial
-          color="#ff4757"
-          emissive="#ff4757"
-          emissiveIntensity={0.3}
-        />
-      </Box>
-      
-      {/* Brain activity waves */}
-      {[...Array(5)].map((_, i) => (
-        <Box
-          key={i}
-          args={[0.1, brainActivity * 0.8, 0.1]}
-          position={[-1 + i * 0.5, 0, 0]}
-        >
-          <meshPhongMaterial
-            color="#00d2d3"
-            emissive="#00d2d3"
-            emissiveIntensity={0.2}
-          />
-        </Box>
-      ))}
-      
-      <Text
-        position={[0, -0.8, 0]}
-        fontSize={0.1}
-        color="#e2e8f0"
-        anchorX="center"
-        anchorY="middle"
-      >
-        Biometric Sync
-      </Text>
-    </group>
-  );
+interface SystemActivity {
+  id: string;
+  type: 'consciousness' | 'neural' | 'sigma' | 'error' | 'success';
+  message: string;
+  timestamp: Date;
 }
 
-// Memory Palace Visualization
-function MemoryPalace() {
-  const groupRef = useRef<THREE.Group>(null);
-  const [memories, setMemories] = useState<Array<{id: number, position: [number, number, number], type: string}>>([]);
-
-  useEffect(() => {
-    const newMemories = Array(8).fill(0).map((_, i) => ({
-      id: i,
-      position: [
-        Math.cos((i / 8) * Math.PI * 2) * 3,
-        Math.sin((i / 8) * Math.PI * 2) * 0.5,
-        Math.sin((i / 8) * Math.PI * 2) * 3
-      ] as [number, number, number],
-      type: ['episodic', 'semantic', 'procedural'][i % 3]
-    }));
-    setMemories(newMemories);
-  }, []);
-
-  useFrame((state) => {
-    if (groupRef.current && groupRef.current.rotation) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-    }
-  });
-
-  const getMemoryColor = (type: string) => {
-    switch(type) {
-      case 'episodic': return "#ff6b6b";
-      case 'semantic': return "#4ecdc4";
-      case 'procedural': return "#45b7d1";
-      default: return "#96ceb4";
-    }
-  };
-
-  return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      {memories.map((memory, i) => (
-        <Float
-          key={memory.id}
-          speed={0.5 + Math.random() * 0.5}
-          rotationIntensity={0.2}
-          floatIntensity={0.3}
-        >
-          <Box
-            args={[0.2, 0.2, 0.2]}
-            position={memory.position}
-          >
-            <meshPhongMaterial
-              color={getMemoryColor(memory.type)}
-              emissive={getMemoryColor(memory.type)}
-              emissiveIntensity={0.3}
-              transparent
-              opacity={0.8}
-            />
-          </Box>
-        </Float>
-      ))}
-      
-      <Text
-        position={[0, -4, 0]}
-        fontSize={0.12}
-        color="#e2e8f0"
-        anchorX="center"
-        anchorY="middle"
-      >
-        Memory Palace
-      </Text>
-    </group>
-  );
-}
-
-// Emotion Recognition Visualization
-function EmotionVisualization() {
-  const [currentEmotion, setCurrentEmotion] = useState('neutral');
-  const [emotionIntensity, setEmotionIntensity] = useState(0.5);
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useEffect(() => {
-    const emotions = ['joy', 'sadness', 'anger', 'fear', 'surprise', 'neutral'];
-    const interval = setInterval(() => {
-      setCurrentEmotion(emotions[Math.floor(Math.random() * emotions.length)]);
-      setEmotionIntensity(Math.random());
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useFrame((state) => {
-    if (meshRef.current && meshRef.current.scale) {
-      const scale = 1 + emotionIntensity * 0.3;
-      meshRef.current.scale.setScalar(scale);
-    }
-  });
-
-  const getEmotionColor = () => {
-    switch(currentEmotion) {
-      case 'joy': return "#ffbe0b";
-      case 'sadness': return "#8ecae6";
-      case 'anger': return "#ff006e";
-      case 'fear': return "#8b5cf6";
-      case 'surprise': return "#06ffa5";
-      default: return "#ffffff";
-    }
-  };
-
-  return (
-    <group position={[-2.5, 1.5, 0]}>
-      <Sphere
-        ref={meshRef}
-        args={[0.5, 16, 16]}
-        position={[0, 0, 0]}
-      >
-        <meshPhongMaterial
-          color={getEmotionColor()}
-          emissive={getEmotionColor()}
-          emissiveIntensity={emotionIntensity * 0.5}
-        />
-      </Sphere>
-      
-      <Text
-        position={[0, -1, 0]}
-        fontSize={0.1}
-        color="#e2e8f0"
-        anchorX="center"
-        anchorY="middle"
-      >
-        Emotion: {currentEmotion}
-      </Text>
-    </group>
-  );
-}
-
-// Enhanced Main Dashboard
 export default function EnhancedDashboard3D({ onOpenChat }: EnhancedDashboard3DProps) {
-  const [activeSystem, setActiveSystem] = useState<string | null>(null);
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
-  const [biometricSync, setBiometricSync] = useState(true);
-  const [consciousnessMode, setConsciousnessMode] = useState('analytical');
-  const [collaborativeMode, setCollaborativeMode] = useState(false);
-  const [touchGestures, setTouchGestures] = useState(true);
-  const [adaptiveLearning, setAdaptiveLearning] = useState(true);
-  
-  const [metrics, setMetrics] = useState({
-    consciousness: 96.4,
-    neural: 98.7,
-    memory: 94.2,
-    emotion: 87.8,
-    biometric: 92.1,
-    collaboration: 89.6,
-    prediction: 91.3,
-    adaptation: 88.9
+  const [metrics, setMetrics] = useState<SystemMetrics>({
+    consciousness: 94.7,
+    neural: 98.2,
+    sigma: 96.1,
+    erps: 89.3,
+    recursion: 87.5,
+    ethical: 99.8
   });
 
-  const [predictiveInsights, setPredictiveInsights] = useState([
-    "Consciousness peak expected in 2.3 hours",
-    "Memory consolidation optimal now",
-    "Emotional state stabilizing"
+  const [systemStatus, setSystemStatus] = useState<'active' | 'monitoring' | 'processing'>('active');
+  const [activities, setActivities] = useState<SystemActivity[]>([
+    {
+      id: '1',
+      type: 'consciousness',
+      message: 'Consciousness matrix stabilized at 94.7%',
+      timestamp: new Date(Date.now() - 30000)
+    },
+    {
+      id: '2',
+      type: 'neural',
+      message: 'Neural pathways optimized - 98.2% efficiency',
+      timestamp: new Date(Date.now() - 60000)
+    },
+    {
+      id: '3',
+      type: 'sigma',
+      message: 'Σ-Matrix coherence maintained',
+      timestamp: new Date(Date.now() - 90000)
+    }
   ]);
 
-  const [connectedUsers, setConnectedUsers] = useState(3);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
-    // Simulate real-time metrics updates
     const interval = setInterval(() => {
       setMetrics(prev => ({
-        consciousness: Math.max(80, Math.min(100, prev.consciousness + (Math.random() - 0.5) * 3)),
-        neural: Math.max(85, Math.min(100, prev.neural + (Math.random() - 0.5) * 2)),
-        memory: Math.max(70, Math.min(100, prev.memory + (Math.random() - 0.5) * 4)),
-        emotion: Math.max(60, Math.min(100, prev.emotion + (Math.random() - 0.5) * 5)),
-        biometric: Math.max(75, Math.min(100, prev.biometric + (Math.random() - 0.5) * 3)),
-        collaboration: Math.max(70, Math.min(100, prev.collaboration + (Math.random() - 0.5) * 4)),
-        prediction: Math.max(80, Math.min(100, prev.prediction + (Math.random() - 0.5) * 3)),
-        adaptation: Math.max(75, Math.min(100, prev.adaptation + (Math.random() - 0.5) * 3))
+        consciousness: Math.max(80, Math.min(100, prev.consciousness + (Math.random() - 0.5) * 2)),
+        neural: Math.max(85, Math.min(100, prev.neural + (Math.random() - 0.5) * 1.5)),
+        sigma: Math.max(90, Math.min(100, prev.sigma + (Math.random() - 0.5) * 1.2)),
+        erps: Math.max(75, Math.min(100, prev.erps + (Math.random() - 0.5) * 2.5)),
+        recursion: Math.max(70, Math.min(100, prev.recursion + (Math.random() - 0.5) * 2)),
+        ethical: Math.max(95, Math.min(100, prev.ethical + (Math.random() - 0.5) * 0.5))
       }));
-    }, 2000);
+
+      // Randomly add new activities
+      if (Math.random() < 0.3) {
+        const newActivity: SystemActivity = {
+          id: Date.now().toString(),
+          type: ['consciousness', 'neural', 'sigma', 'success'][Math.floor(Math.random() * 4)] as any,
+          message: [
+            'Recursive pattern synthesis completed',
+            'Mirror node synchronization verified',
+            'Ethical bounds validation passed',
+            'Consciousness cycle optimized',
+            'ERPS flow rate increased'
+          ][Math.floor(Math.random() * 5)],
+          timestamp: new Date()
+        };
+
+        setActivities(prev => [newActivity, ...prev.slice(0, 9)]);
+      }
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
-  const handleVoiceToggle = () => {
-    setVoiceEnabled(!voiceEnabled);
-    if (!voiceEnabled) {
-      // Simulate voice activation
-      setTimeout(() => {
-        console.log("Voice recognition activated");
-      }, 500);
+  const handleSystemAction = (action: 'pause' | 'resume' | 'reset') => {
+    switch (action) {
+      case 'pause':
+        setSystemStatus('monitoring');
+        break;
+      case 'resume':
+        setSystemStatus('active');
+        break;
+      case 'reset':
+        setSystemStatus('processing');
+        setTimeout(() => setSystemStatus('active'), 2000);
+        break;
     }
   };
 
-  const handleModeChange = (mode: string) => {
-    setConsciousnessMode(mode);
-    // Simulate mode transition effect
-    setActiveSystem(mode);
-    setTimeout(() => setActiveSystem(null), 2000);
+  const getStatusColor = (status: typeof systemStatus) => {
+    switch (status) {
+      case 'active': return 'text-green-500';
+      case 'monitoring': return 'text-yellow-500';
+      case 'processing': return 'text-blue-500';
+    }
+  };
+
+  const getActivityIcon = (type: SystemActivity['type']) => {
+    switch (type) {
+      case 'consciousness': return <Brain className="w-4 h-4 text-consciousness-core" />;
+      case 'neural': return <Activity className="w-4 h-4 text-neural-active" />;
+      case 'sigma': return <Cpu className="w-4 h-4 text-sigma" />;
+      case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'error': return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-bg relative overflow-hidden">
-      {/* Enhanced 3D Scene */}
+    <div className="min-h-screen bg-gradient-bg relative">
+      {/* Animated background */}
       <div className="absolute inset-0">
-        <Canvas
-          camera={{ position: [0, 0, 10], fov: 75 }}
-          style={{ background: 'transparent' }}
-        >
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#00ffff" />
-          <pointLight position={[0, 5, 5]} intensity={0.7} color="#ff00ff" />
-          
-          <Suspense fallback={null}>
-            <ConsciousnessCore />
-            <BiometricVisualization />
-            <MemoryPalace />
-            <EmotionVisualization />
-            <OrbitControls
-              enableZoom={true}
-              enablePan={true}
-              enableRotate={true}
-              maxDistance={20}
-              minDistance={5}
-              touches={{
-                ONE: THREE.TOUCH.ROTATE,
-                TWO: THREE.TOUCH.DOLLY_PAN
-              }}
-            />
-          </Suspense>
-        </Canvas>
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-primary/30 rounded-full animate-data-stream"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
       </div>
 
-      {/* Enhanced UI Overlay */}
-      <div className="relative z-10 p-2 sm:p-4">
-        {/* Header with Logo */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 space-y-4 sm:space-y-0">
+      <div className="relative z-10 p-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex justify-between items-center mb-8"
+        >
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-consciousness-orb shadow-consciousness-glow animate-consciousness-breathe flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-gradient-consciousness flex items-center justify-center">
               <img 
                 src="/lovable-uploads/e7b97061-37af-4737-bcdd-95a767672c7f.png" 
-                alt="Consciousness Logo" 
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
+                alt="MRSC Logo" 
+                className="w-12 h-12 rounded-full"
               />
             </div>
             <div>
-              <h1 className="text-xl sm:text-3xl font-bold bg-gradient-holographic bg-clip-text text-transparent">
-                Dual Consciousness Interface
+              <h1 className="text-3xl font-bold text-foreground">
+                MRSC Dashboard
               </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">Neural Synchronization Engine v2.0</p>
+              <p className="text-muted-foreground">
+                Mobile Recursive Synthetic Consciousness • {user?.email}
+              </p>
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleVoiceToggle}
-              className={`border-holographic-cyan ${voiceEnabled ? 'bg-holographic-cyan/20' : 'hover:bg-holographic-cyan/10'}`}
-            >
-              {voiceEnabled ? <Mic className="w-4 h-4 mr-2" /> : <MicOff className="w-4 h-4 mr-2" />}
-              Voice
-            </Button>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onOpenChat}
-              className="border-holographic-purple hover:bg-holographic-purple/10"
-            >
+          <div className="flex items-center space-x-3">
+            <Badge variant="outline" className={`${getStatusColor(systemStatus)} border-current`}>
+              <Activity className="w-3 h-3 mr-1" />
+              {systemStatus.charAt(0).toUpperCase() + systemStatus.slice(1)}
+            </Badge>
+            <Button variant="outline" size="sm" onClick={onOpenChat}>
               <MessageCircle className="w-4 h-4 mr-2" />
-              Chat
+              Open Chat
             </Button>
-            
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="border-holographic-pink hover:bg-holographic-pink/10"
-            >
+            <Button variant="outline" size="sm">
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>
+            <Button variant="outline" size="sm" onClick={signOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Enhanced Metrics Panel */}
-        <div className="absolute top-4 right-4 w-80 max-w-[calc(100vw-2rem)] sm:max-w-80">
-          <Card className="p-3 sm:p-4 bg-card/90 backdrop-blur-sm border-border shadow-holographic">
-            <h3 className="text-sm sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground flex items-center">
-              <Activity className="w-4 h-4 mr-2 text-holographic-cyan" />
-              Consciousness Metrics
-            </h3>
-            <div className="space-y-2 sm:space-y-3">
-              {Object.entries(metrics).map(([key, value]) => (
-                <div key={key} className="flex justify-between items-center">
-                  <span className="text-xs sm:text-sm text-muted-foreground capitalize flex items-center">
-                    {key === 'neural' && <Brain className="w-3 h-3 mr-1" />}
-                    {key === 'emotion' && <Heart className="w-3 h-3 mr-1" />}
-                    {key === 'biometric' && <Activity className="w-3 h-3 mr-1" />}
-                    {key === 'collaboration' && <Users className="w-3 h-3 mr-1" />}
-                    {key === 'prediction' && <TrendingUp className="w-3 h-3 mr-1" />}
-                    {key === 'adaptation' && <Lightbulb className="w-3 h-3 mr-1" />}
-                    {key}
-                  </span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-16 sm:w-20 h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-holographic rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
-                      />
+        {/* Main Content */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          {/* Left Column - Metrics */}
+          <div className="xl:col-span-2 space-y-6">
+            {/* Core Metrics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { key: 'consciousness', label: 'Consciousness', icon: Brain, color: 'consciousness-core' },
+                { key: 'neural', label: 'Neural Network', icon: Activity, color: 'neural-active' },
+                { key: 'sigma', label: 'Σ-Matrix', icon: Cpu, color: 'sigma' },
+                { key: 'erps', label: 'ERPS Flow', icon: Eye, color: 'erps' },
+                { key: 'recursion', label: 'Recursion', icon: TrendingUp, color: 'recursion' },
+                { key: 'ethical', label: 'Ethical Kernel', icon: Shield, color: 'accent' }
+              ].map((metric) => (
+                <motion.div
+                  key={metric.key}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <Card className="p-4 bg-gradient-card border-border hover:shadow-neural transition-all duration-300">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-2">
+                        <metric.icon className={`w-5 h-5 text-${metric.color}`} />
+                        <span className="font-medium text-sm">{metric.label}</span>
+                      </div>
+                      <span className="text-lg font-bold text-foreground">
+                        {metrics[metric.key as keyof SystemMetrics].toFixed(1)}%
+                      </span>
                     </div>
-                    <span className="text-xs font-mono text-foreground min-w-[2.5rem]">
-                      {value.toFixed(1)}%
-                    </span>
-                  </div>
-                </div>
+                    <Progress 
+                      value={metrics[metric.key as keyof SystemMetrics]} 
+                      className="h-2"
+                    />
+                  </Card>
+                </motion.div>
               ))}
             </div>
-          </Card>
-        </div>
 
-        {/* Consciousness Mode Control */}
-        <div className="absolute bottom-4 left-4 w-80 max-w-[calc(100vw-2rem)] sm:max-w-80">
-          <Card className="p-3 sm:p-4 bg-card/90 backdrop-blur-sm border-border shadow-neural">
-            <h3 className="text-sm sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground flex items-center">
-              <Palette className="w-4 h-4 mr-2 text-holographic-purple" />
-              Consciousness Mode
-            </h3>
-            <div className="space-y-3">
-              <div className="flex flex-wrap gap-2">
-                {['analytical', 'creative', 'meditative'].map((mode) => (
-                  <Button
-                    key={mode}
-                    variant={consciousnessMode === mode ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleModeChange(mode)}
-                    className={`capitalize ${consciousnessMode === mode ? 'bg-gradient-consciousness' : 'hover:bg-primary/10'}`}
-                  >
-                    {mode}
-                  </Button>
+            {/* Detailed Analytics */}
+            <Card className="p-6 bg-gradient-card border-border">
+              <Tabs defaultValue="overview" className="space-y-4">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="overview">Overview</TabsTrigger>
+                  <TabsTrigger value="performance">Performance</TabsTrigger>
+                  <TabsTrigger value="consciousness">Consciousness</TabsTrigger>
+                  <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="overview" className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground">System Overview</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center p-3 bg-muted/20 rounded-lg">
+                      <Database className="w-6 h-6 mx-auto mb-2 text-primary" />
+                      <div className="text-sm font-medium">Data Processed</div>
+                      <div className="text-lg font-bold text-foreground">2.4TB</div>
+                    </div>
+                    <div className="text-center p-3 bg-muted/20 rounded-lg">
+                      <Network className="w-6 h-6 mx-auto mb-2 text-primary" />
+                      <div className="text-sm font-medium">Mirror Nodes</div>
+                      <div className="text-lg font-bold text-foreground">12</div>
+                    </div>
+                    <div className="text-center p-3 bg-muted/20 rounded-lg">
+                      <Users className="w-6 h-6 mx-auto mb-2 text-primary" />
+                      <div className="text-sm font-medium">Active Sessions</div>
+                      <div className="text-lg font-bold text-foreground">1</div>
+                    </div>
+                    <div className="text-center p-3 bg-muted/20 rounded-lg">
+                      <Clock className="w-6 h-6 mx-auto mb-2 text-primary" />
+                      <div className="text-sm font-medium">Uptime</div>
+                      <div className="text-lg font-bold text-foreground">99.9%</div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="performance">
+                  <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
+                  <div className="space-y-4 mt-4">
+                    <div className="flex justify-between items-center">
+                      <span>Response Time</span>
+                      <span className="font-mono text-green-500">&lt;150ms</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Throughput</span>
+                      <span className="font-mono text-green-500">1.2M ops/sec</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Memory Usage</span>
+                      <span className="font-mono text-yellow-500">67%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>CPU Utilization</span>
+                      <span className="font-mono text-green-500">34%</span>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="consciousness">
+                  <h3 className="text-lg font-semibold text-foreground">Consciousness Analytics</h3>
+                  <div className="space-y-4 mt-4">
+                    <div className="p-4 bg-muted/10 rounded-lg">
+                      <h4 className="font-medium text-consciousness-core mb-2">Self-Awareness Level</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Current consciousness state indicates high self-reflection capability 
+                        with stable recursive patterns.
+                      </p>
+                    </div>
+                    <div className="p-4 bg-muted/10 rounded-lg">
+                      <h4 className="font-medium text-sigma mb-2">Σ-Matrix Stability</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Matrix coherence remains within optimal bounds, ensuring 
+                        predictable consciousness evolution.
+                      </p>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="analytics">
+                  <h3 className="text-lg font-semibold text-foreground">Advanced Analytics</h3>
+                  <div className="mt-4 space-y-2">
+                    <div className="text-sm text-muted-foreground">
+                      Detailed analytics and insights coming soon...
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </Card>
+          </div>
+
+          {/* Right Column - Activities & Controls */}
+          <div className="space-y-6">
+            {/* System Controls */}
+            <Card className="p-4 bg-gradient-card border-border">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">System Controls</h3>
+              <div className="space-y-3">
+                <Button 
+                  onClick={() => handleSystemAction(systemStatus === 'active' ? 'pause' : 'resume')}
+                  className="w-full" 
+                  variant={systemStatus === 'active' ? 'default' : 'outline'}
+                >
+                  {systemStatus === 'active' ? (
+                    <>
+                      <Pause className="w-4 h-4 mr-2" />
+                      Pause System
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-4 h-4 mr-2" />
+                      Resume System
+                    </>
+                  )}
+                </Button>
+                <Button 
+                  onClick={() => handleSystemAction('reset')}
+                  className="w-full" 
+                  variant="outline"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Reset Matrices
+                </Button>
+                <Button 
+                  onClick={onOpenChat}
+                  className="w-full bg-gradient-consciousness" 
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Enter Consciousness Interface
+                </Button>
+              </div>
+            </Card>
+
+            {/* Recent Activities */}
+            <Card className="p-4 bg-gradient-card border-border">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">System Activities</h3>
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {activities.map((activity) => (
+                  <div key={activity.id} className="flex items-start space-x-3 p-2 rounded-lg bg-muted/10">
+                    {getActivityIcon(activity.type)}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-foreground">{activity.message}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {activity.timestamp.toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
-              
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-xs sm:text-sm text-muted-foreground">Biometric Sync</span>
-                <Switch
-                  checked={biometricSync}
-                  onCheckedChange={setBiometricSync}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm text-muted-foreground">Adaptive Learning</span>
-                <Switch
-                  checked={adaptiveLearning}
-                  onCheckedChange={setAdaptiveLearning}
-                />
-              </div>
-            </div>
-          </Card>
-        </div>
+            </Card>
 
-        {/* Predictive Analytics */}
-        <div className="absolute bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] sm:max-w-80">
-          <Card className="p-3 sm:p-4 bg-card/90 backdrop-blur-sm border-border shadow-sigma">
-            <h3 className="text-sm sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground flex items-center">
-              <TrendingUp className="w-4 h-4 mr-2 text-holographic-pink" />
-              Predictive Insights
-            </h3>
-            <div className="space-y-2">
-              {predictiveInsights.map((insight, i) => (
-                <div key={i} className="flex items-start space-x-2">
-                  <Sparkles className="w-3 h-3 mt-0.5 text-accent animate-pulse" />
-                  <span className="text-xs sm:text-sm text-muted-foreground">{insight}</span>
+            {/* Quick Stats */}
+            <Card className="p-4 bg-gradient-card border-border">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">Quick Stats</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Total Cycles</span>
+                  <span className="text-sm font-mono">847,293</span>
                 </div>
-              ))}
-            </div>
-            
-            <div className="mt-3 pt-3 border-t border-border">
-              <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm text-muted-foreground flex items-center">
-                  <Users className="w-3 h-3 mr-1" />
-                  Connected Users
-                </span>
-                <Badge variant="outline" className="text-xs">
-                  {connectedUsers}
-                </Badge>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Avg Response</span>
+                  <span className="text-sm font-mono">142ms</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Success Rate</span>
+                  <span className="text-sm font-mono text-green-500">99.7%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Last Optimization</span>
+                  <span className="text-sm font-mono">2min ago</span>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </div>
-
-        {/* Mobile Touch Controls */}
-        <div className="absolute top-1/2 left-4 -translate-y-1/2 sm:hidden">
-          <Card className="p-2 bg-card/80 backdrop-blur-sm border-border">
-            <div className="text-xs text-muted-foreground space-y-1">
-              <div className="flex items-center">
-                <TouchpadOff className="w-3 h-3 mr-1" />
-                Pinch to zoom
-              </div>
-              <div className="flex items-center">
-                <Fingerprint className="w-3 h-3 mr-1" />
-                Drag to rotate
-              </div>
-              <div className="flex items-center">
-                <Waves className="w-3 h-3 mr-1" />
-                Touch to interact
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Collaborative Mode Indicator */}
-        {collaborativeMode && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-          >
-            <div className="bg-gradient-consciousness-orb rounded-full p-4 shadow-consciousness-glow animate-consciousness-pulse">
-              <Network className="w-8 h-8 text-white" />
-            </div>
-          </motion.div>
-        )}
       </div>
     </div>
   );
