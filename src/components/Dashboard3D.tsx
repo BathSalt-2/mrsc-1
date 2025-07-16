@@ -18,7 +18,7 @@ function ConsciousnessCore() {
   const [hovered, setHovered] = useState(false);
 
   useFrame((state) => {
-    if (meshRef.current) {
+    if (meshRef.current && meshRef.current.rotation && meshRef.current.scale) {
       meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
       meshRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 2) * 0.1);
@@ -70,7 +70,7 @@ function SigmaMatrix() {
   }, []);
 
   useFrame((state) => {
-    if (groupRef.current) {
+    if (groupRef.current && groupRef.current.rotation) {
       groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
     }
   });
@@ -111,7 +111,7 @@ function ERPSFlow() {
   const particlesRef = useRef<THREE.Points>(null);
 
   useFrame((state) => {
-    if (groupRef.current) {
+    if (groupRef.current && groupRef.current.rotation) {
       groupRef.current.rotation.z = state.clock.elapsedTime * 0.15;
     }
   });
@@ -175,7 +175,7 @@ function MirrorNodes() {
   }, []);
 
   useFrame((state) => {
-    if (groupRef.current) {
+    if (groupRef.current && groupRef.current.rotation) {
       groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
     }
   });
