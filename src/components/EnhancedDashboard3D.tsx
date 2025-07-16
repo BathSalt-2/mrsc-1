@@ -30,6 +30,11 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface EnhancedDashboard3DProps {
   onOpenChat: () => void;
+  onOpenProfile: () => void;
+  onOpenNotifications: () => void;
+  onOpenAnalytics: () => void;
+  onOpenTeam: () => void;
+  onOpenOffline: () => void;
 }
 
 interface SystemMetrics {
@@ -48,7 +53,14 @@ interface SystemActivity {
   timestamp: Date;
 }
 
-export default function EnhancedDashboard3D({ onOpenChat }: EnhancedDashboard3DProps) {
+export default function EnhancedDashboard3D({ 
+  onOpenChat, 
+  onOpenProfile, 
+  onOpenNotifications, 
+  onOpenAnalytics, 
+  onOpenTeam, 
+  onOpenOffline 
+}: EnhancedDashboard3DProps) {
   const [metrics, setMetrics] = useState<SystemMetrics>({
     consciousness: 94.7,
     neural: 98.2,

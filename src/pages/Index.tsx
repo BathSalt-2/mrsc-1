@@ -4,6 +4,10 @@ import { useAuth } from '@/hooks/useAuth';
 import LandingPage from '@/components/LandingPage';
 import LoadingScreen from '@/components/LoadingScreen';
 import EnhancedDashboard3D from '@/components/EnhancedDashboard3D';
+import CustomizableWidgetDashboard from '@/components/CustomizableWidgetDashboard';
+import AIInsightsEngine from '@/components/AIInsightsEngine';
+import HelpOnboarding from '@/components/HelpOnboarding';
+import AdvancedSecurityCenter from '@/components/AdvancedSecurityCenter';
 import UserProfile from '@/components/UserProfile';
 import NotificationCenter from '@/components/NotificationCenter';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
@@ -11,7 +15,7 @@ import TeamCollaboration from '@/components/TeamCollaboration';
 import OfflineMode from '@/components/OfflineMode';
 import ChatInterface from '@/components/ChatInterface';
 
-type AppState = 'landing' | 'loading' | 'dashboard' | 'chat' | 'profile' | 'notifications' | 'analytics' | 'team' | 'offline';
+type AppState = 'landing' | 'loading' | 'dashboard' | 'chat' | 'profile' | 'notifications' | 'analytics' | 'team' | 'offline' | 'widgets' | 'insights' | 'help' | 'security';
 
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>('landing');
@@ -61,6 +65,10 @@ const Index = () => {
   const handleOpenAnalytics = () => setCurrentState('analytics');
   const handleOpenTeam = () => setCurrentState('team');
   const handleOpenOffline = () => setCurrentState('offline');
+  const handleOpenWidgets = () => setCurrentState('widgets');
+  const handleOpenInsights = () => setCurrentState('insights');
+  const handleOpenHelp = () => setCurrentState('help');
+  const handleOpenSecurity = () => setCurrentState('security');
 
   switch (currentState) {
     case 'landing':
@@ -81,6 +89,14 @@ const Index = () => {
       return <TeamCollaboration onBack={handleBackToDashboard} />;
     case 'offline':
       return <OfflineMode onBack={handleBackToDashboard} />;
+    case 'widgets':
+      return <CustomizableWidgetDashboard onBack={handleBackToDashboard} />;
+    case 'insights':
+      return <AIInsightsEngine onBack={handleBackToDashboard} />;
+    case 'help':
+      return <HelpOnboarding onBack={handleBackToDashboard} />;
+    case 'security':
+      return <AdvancedSecurityCenter onBack={handleBackToDashboard} />;
     default:
       return <LandingPage onEnterSystem={handleEnterSystem} />;
   }
