@@ -48,7 +48,6 @@ function ConsciousnessCore() {
         color="#e2e8f0"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Inter-Bold.woff"
       >
         Consciousness Core
       </Text>
