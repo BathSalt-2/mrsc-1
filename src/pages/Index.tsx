@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import LandingPage from '@/components/LandingPage';
 import LoadingScreen from '@/components/LoadingScreen';
 import Dashboard3D from '@/components/Dashboard3D';
@@ -8,6 +10,15 @@ type AppState = 'landing' | 'loading' | 'dashboard' | 'chat';
 
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>('landing');
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to auth if not logged in and not on landing page
+    if (!loading && !user && currentState !== 'landing') {
+      navigate('/auth');
+    }
+  }, [user, loading, currentState, navigate]);
 
   const handleEnterSystem = () => {
     setCurrentState('loading');

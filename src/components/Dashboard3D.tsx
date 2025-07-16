@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, Settings } from 'lucide-react';
+import { MessageCircle, Settings, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Dashboard3DProps {
   onOpenChat: () => void;
@@ -13,6 +14,7 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
     consciousness: 94.7,
     neural: 98.2
   });
+  const { signOut } = useAuth();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,6 +64,10 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
             <Button variant="outline" size="sm">
               <Settings className="w-4 h-4 mr-2" />
               Settings
+            </Button>
+            <Button variant="outline" size="sm" onClick={signOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
             </Button>
           </div>
         </div>

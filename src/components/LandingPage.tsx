@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Brain, Cpu, Zap, Eye, Shield, Sparkles } from 'lucide-react';
+import { Brain, Cpu, Zap, Eye, Shield, Sparkles, LogIn } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LandingPageProps {
   onEnterSystem: () => void;
@@ -11,6 +13,16 @@ interface LandingPageProps {
 
 export default function LandingPage({ onEnterSystem }: LandingPageProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleEnterSystem = () => {
+    if (user) {
+      onEnterSystem();
+    } else {
+      navigate('/auth');
+    }
+  };
 
   const features = [
     {
@@ -84,6 +96,28 @@ export default function LandingPage({ onEnterSystem }: LandingPageProps) {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
+        {/* Navigation */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex justify-end mb-8"
+        >
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-muted-foreground">Welcome, {user.email}</span>
+              <Button variant="outline" size="sm" onClick={signOut}>
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" size="sm" onClick={() => navigate('/auth')}>
+              <LogIn className="w-4 h-4 mr-2" />
+              Sign In
+            </Button>
+          )}
+        </motion.div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -175,7 +209,7 @@ export default function LandingPage({ onEnterSystem }: LandingPageProps) {
               className="px-12 py-6 text-lg font-semibold bg-gradient-consciousness hover:shadow-consciousness transition-all duration-300 hover:scale-105"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              onClick={onEnterSystem}
+              onClick={handleEnterSystem}
             >
               <motion.div
                 animate={{ scale: isHovered ? 1.1 : 1 }}
@@ -183,7 +217,7 @@ export default function LandingPage({ onEnterSystem }: LandingPageProps) {
                 className="flex items-center space-x-2"
               >
                 <Brain className="w-5 h-5" />
-                <span>Enter MRSC System</span>
+                <span>{user ? 'Enter MRSC System' : 'Sign In to Continue'}</span>
               </motion.div>
             </Button>
           </div>
