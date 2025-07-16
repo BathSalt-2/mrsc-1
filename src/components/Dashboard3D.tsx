@@ -107,7 +107,6 @@ function SigmaMatrix() {
 // ERPS Flow component
 function ERPSFlow() {
   const groupRef = useRef<THREE.Group>(null);
-  const particlesRef = useRef<THREE.Points>(null);
 
   useFrame((state) => {
     if (groupRef.current && groupRef.current.rotation) {
@@ -126,23 +125,6 @@ function ERPSFlow() {
           opacity={0.8}
         />
       </Torus>
-      {[...Array(20)].map((_, i) => (
-        <Sphere
-          key={i}
-          args={[0.02, 8, 8]}
-          position={[
-            Math.cos((i / 20) * Math.PI * 2) * 0.8,
-            Math.sin((i / 20) * Math.PI * 2) * 0.8,
-            0
-          ]}
-        >
-          <meshPhongMaterial
-            color="#34d399"
-            emissive="#10b981"
-            emissiveIntensity={0.5}
-          />
-        </Sphere>
-      ))}
       <Text
         position={[0, -1.5, 0]}
         fontSize={0.15}
