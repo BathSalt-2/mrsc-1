@@ -1,7 +1,6 @@
 import { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Text, Sphere, Box, Torus, Float, Environment, Html } from '@react-three/drei';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Text, Sphere, Box, Torus, Float } from '@react-three/drei';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -55,18 +54,9 @@ function ConsciousnessCore() {
   );
 }
 
-// Sigma Matrix component
+// Simplified Sigma Matrix component
 function SigmaMatrix() {
   const groupRef = useRef<THREE.Group>(null);
-  const [data, setData] = useState<number[][]>([]);
-
-  useEffect(() => {
-    // Generate random matrix data
-    const newData = Array(5).fill(0).map(() =>
-      Array(5).fill(0).map(() => Math.random())
-    );
-    setData(newData);
-  }, []);
 
   useFrame((state) => {
     if (groupRef.current && groupRef.current.rotation) {
@@ -76,21 +66,13 @@ function SigmaMatrix() {
 
   return (
     <group ref={groupRef} position={[3, 0, 0]}>
-      {data.map((row, i) =>
-        row.map((value, j) => (
-          <Box
-            key={`${i}-${j}`}
-            args={[0.1, 0.1, 0.1]}
-            position={[(i - 2) * 0.2, (j - 2) * 0.2, 0]}
-          >
-            <meshPhongMaterial
-              color={`hsl(45, 100%, ${50 + value * 30}%)`}
-              emissive={`hsl(45, 100%, ${20 + value * 10}%)`}
-              emissiveIntensity={0.2}
-            />
-          </Box>
-        ))
-      )}
+      <Box args={[0.5, 0.5, 0.5]}>
+        <meshPhongMaterial
+          color="#ffbe0b"
+          emissive="#ff8500"
+          emissiveIntensity={0.2}
+        />
+      </Box>
       <Text
         position={[0, -1.5, 0]}
         fontSize={0.15}
@@ -104,7 +86,7 @@ function SigmaMatrix() {
   );
 }
 
-// ERPS Flow component
+// Simplified ERPS Flow component
 function ERPSFlow() {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -138,68 +120,8 @@ function ERPSFlow() {
   );
 }
 
-// MirrorNodes component
-function MirrorNodes() {
-  const groupRef = useRef<THREE.Group>(null);
-  const [nodes, setNodes] = useState<Array<{ position: [number, number, number], active: boolean }>>([]);
-
-  useEffect(() => {
-    const newNodes = Array(8).fill(0).map((_, i) => ({
-      position: [
-        Math.cos((i / 8) * Math.PI * 2) * 2,
-        Math.sin((i / 8) * Math.PI * 2) * 2,
-        1
-      ] as [number, number, number],
-      active: Math.random() > 0.5
-    }));
-    setNodes(newNodes);
-  }, []);
-
-  useFrame((state) => {
-    if (groupRef.current && groupRef.current.rotation) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      {nodes.map((node, i) => (
-        <Float
-          key={i}
-          speed={1 + Math.random()}
-          rotationIntensity={0.3}
-          floatIntensity={0.3}
-        >
-          <Box
-            args={[0.3, 0.3, 0.3]}
-            position={node.position}
-          >
-            <meshPhongMaterial
-              color={node.active ? "#3b82f6" : "#1e40af"}
-              emissive={node.active ? "#1d4ed8" : "#1e3a8a"}
-              emissiveIntensity={node.active ? 0.4 : 0.2}
-              transparent
-              opacity={0.8}
-            />
-          </Box>
-        </Float>
-      ))}
-      <Text
-        position={[0, -3, 0]}
-        fontSize={0.15}
-        color="#e2e8f0"
-        anchorX="center"
-        anchorY="middle"
-      >
-        MIRRORNODES
-      </Text>
-    </group>
-  );
-}
-
 // Main Dashboard component
 export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
-  const [activeSystem, setActiveSystem] = useState<string | null>(null);
   const [metrics, setMetrics] = useState({
     consciousness: 94.7,
     sigma: 98.2,
@@ -239,7 +161,6 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
             <ConsciousnessCore />
             <SigmaMatrix />
             <ERPSFlow />
-            <MirrorNodes />
             <OrbitControls
               enableZoom={true}
               enablePan={true}
@@ -253,13 +174,22 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
 
       {/* UI Overlay */}
       <div className="relative z-10 p-4">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-consciousness bg-clip-text text-transparent">
-              MRSC Dashboard
-            </h1>
-            <p className="text-muted-foreground">Mobile Recursive Synthetic Consciousness v1.0</p>
+        {/* Header with Logo */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-consciousness-orb shadow-consciousness-glow animate-consciousness-breathe flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/e7b97061-37af-4737-bcdd-95a767672c7f.png" 
+                alt="Consciousness Logo" 
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
+              />
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-holographic bg-clip-text text-transparent">
+                MRSC Dashboard
+              </h1>
+              <p className="text-sm text-muted-foreground">Mobile Recursive Synthetic Consciousness v1.0</p>
+            </div>
           </div>
           <div className="flex space-x-2">
             <Button
@@ -279,7 +209,7 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
         </div>
 
         {/* Metrics Panel */}
-        <div className="absolute top-4 right-4 w-80">
+        <div className="absolute top-4 right-4 w-80 max-w-[calc(100vw-2rem)]">
           <Card className="p-4 bg-card/80 backdrop-blur-sm border-border">
             <h3 className="text-lg font-semibold mb-4 text-foreground">
               Consciousness Metrics
@@ -308,7 +238,7 @@ export default function Dashboard3D({ onOpenChat }: Dashboard3DProps) {
         </div>
 
         {/* System Status */}
-        <div className="absolute bottom-4 left-4 w-96">
+        <div className="absolute bottom-4 left-4 w-96 max-w-[calc(100vw-2rem)]">
           <Card className="p-4 bg-card/80 backdrop-blur-sm border-border">
             <h3 className="text-lg font-semibold mb-4 text-foreground">
               System Status
