@@ -4,9 +4,14 @@ import { useAuth } from '@/hooks/useAuth';
 import LandingPage from '@/components/LandingPage';
 import LoadingScreen from '@/components/LoadingScreen';
 import EnhancedDashboard3D from '@/components/EnhancedDashboard3D';
+import UserProfile from '@/components/UserProfile';
+import NotificationCenter from '@/components/NotificationCenter';
+import AnalyticsDashboard from '@/components/AnalyticsDashboard';
+import TeamCollaboration from '@/components/TeamCollaboration';
+import OfflineMode from '@/components/OfflineMode';
 import ChatInterface from '@/components/ChatInterface';
 
-type AppState = 'landing' | 'loading' | 'dashboard' | 'chat';
+type AppState = 'landing' | 'loading' | 'dashboard' | 'chat' | 'profile' | 'notifications' | 'analytics' | 'team' | 'offline';
 
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>('landing');
@@ -51,15 +56,31 @@ const Index = () => {
     setCurrentState('dashboard');
   };
 
+  const handleOpenProfile = () => setCurrentState('profile');
+  const handleOpenNotifications = () => setCurrentState('notifications');
+  const handleOpenAnalytics = () => setCurrentState('analytics');
+  const handleOpenTeam = () => setCurrentState('team');
+  const handleOpenOffline = () => setCurrentState('offline');
+
   switch (currentState) {
     case 'landing':
       return <LandingPage onEnterSystem={handleEnterSystem} />;
     case 'loading':
       return <LoadingScreen onComplete={handleLoadingComplete} />;
     case 'dashboard':
-      return <EnhancedDashboard3D onOpenChat={handleOpenChat} />;
+      return <EnhancedDashboard3D onOpenChat={handleOpenChat} onOpenProfile={handleOpenProfile} onOpenNotifications={handleOpenNotifications} onOpenAnalytics={handleOpenAnalytics} onOpenTeam={handleOpenTeam} onOpenOffline={handleOpenOffline} />;
     case 'chat':
       return <ChatInterface onBack={handleBackToDashboard} />;
+    case 'profile':
+      return <UserProfile onBack={handleBackToDashboard} />;
+    case 'notifications':
+      return <NotificationCenter onBack={handleBackToDashboard} />;
+    case 'analytics':
+      return <AnalyticsDashboard onBack={handleBackToDashboard} />;
+    case 'team':
+      return <TeamCollaboration onBack={handleBackToDashboard} />;
+    case 'offline':
+      return <OfflineMode onBack={handleBackToDashboard} />;
     default:
       return <LandingPage onEnterSystem={handleEnterSystem} />;
   }
